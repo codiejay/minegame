@@ -30,8 +30,8 @@ export const MineContainerResults = ({allMines, allRevealedMines}:{allMines: any
               <MinesResults 
                 itemindex={index} 
                 key={index}  
-                type={allMines.indexOf(index) === -1 ? "gem" : "mine"}
-                revealed={allRevealedMines.revealedTiles.indexOf(index) === -1 ? true : false}
+                type={allMines && allMines.indexOf(index) === -1 ? "gem" : "mine"}
+                revealed={allRevealedMines && allRevealedMines.revealedTiles.indexOf(index) === -1 ? true : false}
               />
             )
           })
