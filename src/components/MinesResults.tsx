@@ -2,9 +2,6 @@ import React from 'react';
 import styled, {keyframes} from "styled-components";
 import {Gem} from '../assets';
 import {Mine} from '../assets';
-import gemAudio from "../assets/gem.mp3";
-import mineAudio from "../assets/mine.mp3";
-import {minesNext,} from '../api'
 
 
 //styled components  amd animations
@@ -60,76 +57,43 @@ const GemStyledDiv = styled.div`
 `
 
 //Audio 
-let playgemAudio = new Audio(gemAudio);
-let playmineAudio = new Audio(mineAudio);
 
-
-
-
-export const Mines = (
+export const MinesResults = (
   {
-    gamestatus, 
-    itemindex, 
-    handleReturnedMineClick,
-    returnData,
+    type,
+    revealed,
   }
     : 
     {
-      gamestatus: any, 
-      results?: boolean,
-      itemindex: number, 
-      handleReturnedMineClick?: any,
-      returnData?: any
+      type: string,
+      revealed: boolean,
     }) => 
     { 
   //react hook
-  const [revealMines, setRevealMines] = React.useState(false);
-  const [mineResults, setMineResults] = React.useState([]);
-  const [whichGemToReveal, setWhichGemToReveal] = React.useState();
 
   //small components
-  const MineContainerDiv = ({gamestatus, showResults}:{gamestatus?: string, showResults: boolean}) => {
+  const MineContainerDiv = () => {
     return (
-      <div style={{opacity: revealMines ? '1' : '0'}}>
+      <div style={{opacity: !revealed ? 1 : 0.3}}>
         { 
-          gamestatus !== 'progress' ? 
+          type !== 'gem' ? 
             <MinesStyledDiv>
-              <Mine />
+              <Mine/>
             </MinesStyledDiv>
           :
             <GemStyledDiv>
-              <Gem />
+              <Gem/>
             </GemStyledDiv>
         }
       </div>
     )
   }
 
-  //functions
-
-  const handleMineClick = async() => {
-    let getMinesClicks = await minesNext(itemindex);
-
-    setWhichGemToReveal(getMinesClicks.state);
-    handleReturnedMineClick(getMinesClicks.state);
-    returnData(getMinesClicks);
-    setMineResults(getMinesClicks.mines);
-    
-    setRevealMines(true); 
-    if(getMinesClicks.state === "progress") { 
-      playgemAudio.play()
-      playgemAudio.currentTime = 0;
-    }
-    else { 
-      playmineAudio.play()
-      playmineAudio.currentTime = 0;
-    }
-  }
 
   return ( 
-    <MineDiv onClick={whichGemToReveal === "progress" || gamestatus === "progress"  ? handleMineClick : () => {return null}}>
+    <MineDiv>
       { 
-        <MineContainerDiv gamestatus={whichGemToReveal}/>
+        <MineContainerDiv/>
       }
     </MineDiv>
   )
