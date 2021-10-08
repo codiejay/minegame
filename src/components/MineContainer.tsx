@@ -2,6 +2,7 @@ import React from 'react';
 import { Mines } from './Mines';
 import styled from "styled-components";
 import {minesBet, minesNext, minesCashout} from '../api'
+import { MineContainerResults } from './MineContainerResults';
 
 //styled components
 const StyledMineDiv = styled.div`
@@ -17,8 +18,7 @@ const StyledMainDiv = styled.div`
   width: fit-content;
   margin: 0 auto;
   display: grid; 
-  grid-template-columns: 3fr 7fr;
-  grid-template-rows: auto;
+  grid-template-columns: 3fr 7fr ;
   gap: 1em;
 `;
 
@@ -68,24 +68,31 @@ export const MineContainer = () => {
   const [gameStatus, setGameStatus] = React.useState<{state: string} | any >("");
   const [mineBoxCount] = React.useState([0,1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24]);
   const [initRefresh, setInitRefresh] = React.useState(new Date().getTime());
+  const [showResults, setShowResults] = React.useState(false);
+  const [allMines, setAllMines] = React.useState([]);
 
   //Functions 
   const handleBetClick = () => {
     minesBet().then((data) => {
       setGameInProgress(true);
       setGameStatus(data.state);
+      setShowResults(false)
     })
   }; 
 
   const handleReturnedMineClick = (state:{state: string}) => {
     setGameStatus(state);
-    if(state === "busted") { 
+    if(state === "busted") {
+      setShowResults(!showResults);
       setGameInProgress(false);
-      setTimeout(() => {
-        setInitRefresh(new Date().getTime())
-      }, 3000)
+      setInitRefresh(new Date().getTime())
+      
     }
   };
+
+  const handlereturnDataFromMineClick = (data: {data: any}) => {
+    setAllMines(data);
+  }
 
   return ( 
     <div>
@@ -109,20 +116,26 @@ export const MineContainer = () => {
         <StyledCashOutBttn disabled>Cashout</StyledCashOutBttn>
         }
       </div>
-      <StyledMineDiv key={JSON.stringify(initRefresh)}>
-        { 
-          mineBoxCount.map((item, index) => {
-            return ( 
-              <Mines 
-                handleReturnedMineClick={handleReturnedMineClick}
-                itemindex={index} 
-                gamestatus={gameStatus} 
-                key={index}  
-              />
-            )
-          })
-        }
-      </StyledMineDiv>
+      { 
+        !showResults ?  
+          <StyledMineDiv key={JSON.stringify(initRefresh)}>
+          { 
+            mineBoxCount.map((item, index) => {
+              return ( 
+                <Mines 
+                  handleReturnedMineClick={handleReturnedMineClick}
+                  itemindex={index} 
+                  gamestatus={gameStatus} 
+                  key={index}  
+                  returnData={handlereturnDataFromMineClick}
+                />
+              )
+            })
+          }
+        </StyledMineDiv>
+        : 
+        <MineContainerResults allMines={allMines.mines} allRevealedMines={allMines}/>
+      }
     </StyledMainDiv>
     </div>
   );
