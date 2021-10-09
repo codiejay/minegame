@@ -6,7 +6,7 @@ import { MineContainerResults } from './MineContainerResults';
 
 //styled components
 const StyledMineDiv = styled.div`
-  width: fit-content;
+  width: 100%;
   display: grid; 
   grid-template-columns: repeat(5,1fr);
   gap: 1em;
@@ -20,6 +20,10 @@ const StyledMainDiv = styled.div`
   display: grid; 
   grid-template-columns: 3fr 7fr ;
   gap: 1em;
+  
+  @media only screen and (max-width: 700px) { 
+    display: block;
+  }
 `;
 
 const StyledBetBttn = styled.button`
@@ -39,6 +43,9 @@ const StyledBetBttn = styled.button`
     &:hover { 
       background: #118911;
     }
+  @media only screen and (max-width: 700px) { 
+    margin-top: 10%;
+  }
 
 `;
 
