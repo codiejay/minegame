@@ -13,6 +13,7 @@ const StyledMainScreen = styled.div`
   user-select: none;
   @media only screen and (max-width: 700px) { 
     height: 100%;
+    width: 100vw;
   }
 `;
 
