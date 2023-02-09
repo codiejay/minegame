@@ -107,9 +107,9 @@ export const MineContainer = () => {
       <div>
         { 
           gameInProgress ? 
-          <StyledBetBttn disabled>Bet</StyledBetBttn>
+          <StyledBetBttn disabled>Game in progress</StyledBetBttn>
         :
-        <StyledBetBttn onClick={handleBetClick}>Bet</StyledBetBttn>
+        <StyledBetBttn onClick={handleBetClick}>Click to start</StyledBetBttn>
         }
         { 
           !gameInProgress ? 
